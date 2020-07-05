@@ -1,0 +1,22 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          todoist:
+            provider: todoist-provider
+            client-id:
+            client-secret:
+            scope: data:read_write
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-authentication-method: post
+            authorizationGrantType: authorization_code
+            client-name: Pomodo
+        provider:
+          todoist-provider:
+            authorization-uri: https://todoist.com/oauth/authorize?show_dialog=true
+            token-uri: https://todoist.com/oauth/access_token
+            user-info-uri: https://api.todoist.com/sync/v8/user/
+            user-name-attribute: id
+  thymeleaf:
+    cache: false
