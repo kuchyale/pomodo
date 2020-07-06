@@ -25,6 +25,24 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- TODOIST client dependencies -->
+        <!-- https://github.com/AaronCoplan/todoist-java -->
+        <dependency>
+            <groupId>com.aaroncoplan.todoist</groupId>
+            <artifactId>todoist-java</artifactId>
+            <version>1.0</version>
+            <systemPath>${basedir}/src/main/resources/lib/todoist-java.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.moshi</groupId>
+            <artifactId>moshi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
@@ -42,6 +60,10 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
         </dependency>
     </dependencies>
 </project>

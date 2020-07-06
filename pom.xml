@@ -37,19 +37,28 @@
 
     <properties>
         <java.version>11</java.version>
+        <start-class>dev.kuchynski.pomodo.web.PomodoApplication</start-class>
         <bootstrap.version>4.3.1</bootstrap.version>
         <jquery.version>3.4.1</jquery.version>
-        <start-class>dev.kuchynski.pomodo.web.PomodoApplication</start-class>
+        <fontawesome.version>5.13.0</fontawesome.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <moshi.version>1.9.2</moshi.version>
+        <unirest.version>3.7.02</unirest.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- TODOIST client -->
             <dependency>
-                <groupId>com.aaroncoplan.todoist</groupId>
-                <artifactId>todoist-java</artifactId>
-                <version>1.0</version>
-                <systemPath>${basedir}\todoist-java.jar</systemPath>
-                <scope>system</scope>
+                <groupId>com.squareup.moshi</groupId>
+                <artifactId>moshi</artifactId>
+                <version>${moshi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.konghq</groupId>
+                <artifactId>unirest-java</artifactId>
+                <version>${unirest.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!-- webjars -->
@@ -63,6 +72,11 @@
                 <artifactId>jquery</artifactId>
                 <version>${jquery.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>font-awesome</artifactId>
+                <version>${fontawesome.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -70,6 +84,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr305.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

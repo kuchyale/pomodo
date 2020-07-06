@@ -4,7 +4,69 @@
 <head th:insert="fragments/common.html :: head"></head>
 <body>
     <nav th:insert="fragments/common.html
-        :: navClass(class='navbar navbar-expand-lg navbar-dark navbar-custom nav-black')">
+        :: navClass(class='navbar navbar-expand-lg navbar-dark navbar-custom bg-danger')">
     </nav>
+
+    <div class="container mb-4 text-center">
+        <div id="timer" class="container">
+            <h1 class="values">00:00:00</h1>
+            <div>
+                <button type="button" class="btn btn-outline-success startButton">Start</button>
+                <button type="button" class="btn btn-outline-danger stopButton">Stop</button>
+            </div>
+        </div>
+        <div class="container" th:if="${not #lists.isEmpty(tasks)}">
+            <div class="mt-5">
+                <span class="font-weight-bold">Your Todoist tasks for today:</span>
+                <div>
+                    <button type="button" class="btn btn-outline-dark"> <i class="fa fa-plus-circle"></i>Add new</button>
+                </div>
+                <div id="tasks">
+                    <div class="card" th:each="task,iter : ${tasks}">
+                        <div class="card-header p-1" th:id="'heading' + ${iter.index}">
+                            <div class="ml-2 mb-0 text-left">
+                                <input type="checkbox" class="align-middle" aria-label="Complete task">
+                                <button th:text="${task.content}" class="btn btn-link collapsed " data-toggle="collapse" th:attr="data-target='#collapse'+${iter.index}, aria-controls='collapse'+${iter.index}" aria-expanded="true">
+                                    TaskContent
+                                </button>
+                            </div>
+                        </div>
+                        <div th:id="'collapse' + ${iter.index}" class="collapse" th:attr="aria-labelledby='heading'+${iter.index}" data-parent="#tasks">
+                            <div class="card-body">
+                                Task settings
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="fragments/common.html :: footer"></footer>
+
+    <script>
+        let timer = new easytimer.Timer();
+
+        $('#timer .startButton').click(function() {
+            timer.start();
+        });
+
+        $('#timer .stopButton').click(function() {
+            timer.reset();
+            timer.stop();
+        });
+
+        timer.addEventListener('secondsUpdated', function() {
+            $('#timer .values').html(timer.getTimeValues().toString());
+        });
+
+        timer.addEventListener('started', function() {
+            $('#timer .values').html(timer.getTimeValues().toString());
+        });
+
+        timer.addEventListener('reset', function() {
+            $('#timer .values').html(timer.getTimeValues().toString());
+        });
+    </script>
 </body>
 </html>
