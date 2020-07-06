@@ -10,15 +10,16 @@
 
   <title>Pomodo</title>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+  <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <script th:src="@{/js/easytimer.min.js}"></script>
 
-  <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <!-- Custom styles for this template -->
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
   <link th:href="@{/css/main.css}" rel="stylesheet" />
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <link th:href="@{/webjars/font-awesome/css/fontawesome.min.css}" rel="stylesheet" type='text/css'>
+  <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet" type='text/css'>
 </head>
 
 <nav th:fragment="navClass(class)" th:class="${class}">
@@ -31,13 +32,10 @@
     <div class="collapse navbar-collapse" id="navbarResponsive" th:with="dashboardLink=${'/dashboard'}">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" sec:authorize="isAnonymous()">
-          <a href="/oauth2/authorization/todoist" class="nav-link btn btn-success btn-block text-white">
-            <i class="fa"></i> Sign in with <b>Todoist</b>
+          <a href="/oauth2/authorization/todoist" class="nav-link btn btn-light btn-block text-body">
+            <img th:src="@{/img/todoist_logo.png}" width="30" height="30"/>
+            <span class="hidden-xs hidden-sm align-middle">Login with <b>Todoist</b></span>
           </a>
-        </li>
-        <li class="nav-item" sec:authorize="isAuthenticated()"
-            th:if="${#httpServletRequest.requestURI} != ${dashboardLink}">
-          <a class="nav-link text-white" th:href="${dashboardLink}">Dashboard</a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link text-white" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
@@ -50,9 +48,9 @@
   </div>
 </nav>
 
-<footer class="py-5 bg-black text-white text-center">
+<footer class="py-3 bg-danger text-white text-center">
   <a class="d-block" href="https://github.com/kuchyale/pomodo">
     <img th:src="@{/img/github_logo.png}" style="height: 30px;">
   </a>
-  <p>Created by <a href="mailto:o.kuchynski@gmail.com">Aleh Kuchynski</a> &copy; 2020</p>
+  <p>Created by <a href="mailto:o.kuchynski@gmail.com" class="text-decoration-none text-white">Aleh Kuchynski</a> &copy; 2020</p>
 </footer>
