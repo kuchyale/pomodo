@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:insert="fragments/common.html :: head"></head>
+<head th:replace="fragments/common.html :: head"></head>
 <body>
-    <nav th:insert="fragments/common.html
+    <nav th:replace="fragments/common.html
         :: navClass(class='navbar navbar-expand-lg navbar-dark navbar-custom bg-danger')">
     </nav>
 
@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <footer th:insert="fragments/common.html :: footer"></footer>
+    <footer th:replace="fragments/common.html :: footer"></footer>
 
     <script>
         let timer = new easytimer.Timer();
