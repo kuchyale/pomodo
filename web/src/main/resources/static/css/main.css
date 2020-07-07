@@ -1,3 +1,9 @@
 .bg-black {
     background-color: black;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    height: 80px;
+}
