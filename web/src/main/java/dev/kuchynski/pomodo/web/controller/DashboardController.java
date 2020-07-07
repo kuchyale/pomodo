@@ -7,6 +7,7 @@ import com.aaroncoplan.todoist.model.Task;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Nullable;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +49,7 @@ public class DashboardController {
      */
     @GetMapping("/")
     public ModelAndView getDashboard(@Nullable OAuth2AuthenticationToken authToken,
+                                     @Nullable HttpSession session,
                                      @Nullable @RequestParam("withOverdue") Boolean withOverdue) {
         List<Task> tasks = null;
         if (authToken != null) {
@@ -60,6 +64,10 @@ public class DashboardController {
                 } catch (TodoistException e) {
                     throw new IllegalStateException("Error was occurred while trying to get Todoist active tasks", e);
                 }
+            } else if (session != null) {
+                // clear security context and session if there is no access token
+                SecurityContextHolder.clearContext();
+                session.invalidate();
             }
         }
 
