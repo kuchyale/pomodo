@@ -1,0 +1,60 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Settings of timer (dialog window) -->
+<div th:fragment="timer-modal" id="timerSettingModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gridModalLabel">Pomodoro timer settings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid bd-example-row">
+                    <div class="row text-left">
+                        <div class="col">
+                            <input type="checkbox" class="align-middle" aria-label="Auto-start next round" checked>
+                            <span>Auto-start next round</span>
+                        </div>
+                    </div>
+                    <div class="row text-center mt-3">
+                        <div class="col"><h5>Time (in minutes)</h5></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">Work period</div>
+                        <div class="col">Short brake</div>
+                        <div class="col">Long brake</div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-4 def-number-input number-input safari_only">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="quantity" min="1" max="59" name="quantity" value="25" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                        <div class="col-4 def-number-input number-input safari_only">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="quantity" min="1" max="20" name="quantity" value="5" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                        <div class="col-4 def-number-input number-input safari_only">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="quantity" min="1" max="60" name="quantity" value="15" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                    </div>
+                    <div class="row text-left mt-3">
+                        <div class="col-8"># of rounds before long break</div>
+                        <div class="col-4 ml-auto def-number-input number-input safari_only">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="quantity" min="2" max="5" name="quantity" value="3" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
