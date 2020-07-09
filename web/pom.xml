@@ -4,14 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
+        <groupId>dev.kuchynski.pomodo</groupId>
         <artifactId>pomodo</artifactId>
-        <groupId>dev.kuchynski</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>web</artifactId>
 
     <dependencies>
+        <!-- INTERNAL -->
+        <dependency>
+            <groupId>dev.kuchynski.pomodo</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
