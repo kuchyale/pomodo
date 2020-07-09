@@ -9,13 +9,25 @@
 
     <div class="container mb-4 text-center">
         <div id="timer" class="container">
-            <h1 class="values">00:00:00</h1>
-            <div>
-                <button type="button" class="btn btn-outline-success startButton">Start</button>
-                <button type="button" class="btn btn-outline-danger stopButton">Stop</button>
+            <h1 class="values display-1 font-weight-bold">25:00</h1>
+            <div class="row justify-content-center">
+                <button type="button" id="timerStartBtn" class="btn btn-outline-success col-2">Start</button>
+                <button type="button" id="timerStopBtn" class="btn btn-outline-danger  col-2">Stop</button>
+            </div>
+            <div class="row justify-content-center my-2">
+                <button type="button" class="btn btn-outline-danger timerSetupBtn col-2" data-toggle="modal" data-target="#timerSettingModal">
+                    <i class="fa fa-cog mr-1"></i>Settings
+                </button>
             </div>
         </div>
-        <div class="container" th:if="${not #lists.isEmpty(tasks)}">
+        <div class="container" th:if="${#lists.isEmpty(tasks)}">
+            <div class="mt-5">
+                <h5 class="font-weight-bold">Your Todoist list of tasks for today is empty!</h5>
+                <span class="font-weight-bold">So just relax or add a new one:</span>
+                <button type="button" class="btn btn-outline-dark"> <i class="fa fa-plus-circle"></i>Add new</button>
+            </div>
+        </div>
+        <div class="container" th:unless="${#lists.isEmpty(tasks)}">
             <div class="mt-5">
                 <span class="font-weight-bold">Your Todoist tasks for today:</span>
                 <div>
@@ -42,31 +54,12 @@
         </div>
     </div>
 
-    <footer th:replace="fragments/common.html :: footer"></footer>
+    <div th:replace="fragments/timer-settings.html :: timer-modal"></div>
 
-    <script>
-        let timer = new easytimer.Timer();
+    <div th:if="${#lists.isEmpty(tasks)}">
+        <footer th:replace="fragments/common.html :: footer"></footer>
+    </div>
 
-        $('#timer .startButton').click(function() {
-            timer.start();
-        });
-
-        $('#timer .stopButton').click(function() {
-            timer.reset();
-            timer.stop();
-        });
-
-        timer.addEventListener('secondsUpdated', function() {
-            $('#timer .values').html(timer.getTimeValues().toString());
-        });
-
-        timer.addEventListener('started', function() {
-            $('#timer .values').html(timer.getTimeValues().toString());
-        });
-
-        timer.addEventListener('reset', function() {
-            $('#timer .values').html(timer.getTimeValues().toString());
-        });
-    </script>
+    <script th:src="@{/js/timer.js}"></script>
 </body>
 </html>
