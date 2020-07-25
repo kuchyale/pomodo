@@ -4,26 +4,33 @@ import com.aaroncoplan.todoist.Todoist;
 import com.aaroncoplan.todoist.TodoistException;
 import com.aaroncoplan.todoist.model.Due;
 import com.aaroncoplan.todoist.model.Task;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.kuchynski.pomodo.core.api.TimerSettingsService;
+import dev.kuchynski.pomodo.web.dto.TimerSettingsDto;
+import dev.kuchynski.pomodo.web.mapper.TimerSettingsMapper;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Nullable;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -37,29 +44,47 @@ import java.util.stream.Collectors;
 @Controller
 public class DashboardController {
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final String COOKIE_DEFAULT_VALUE = "DEFAULT";
+
     @NonNull
     private final OAuth2AuthorizedClientService authorizedClientService;
+
+    @NonNull
+    private final TimerSettingsService timerSettingsService;
+
+    @NonNull
+    private final TimerSettingsMapper timerSettingsMapper;
 
     /**
      * Return dashboard page.
      *
-     * @param authToken   {@link OAuth2AuthenticationToken}
-     * @param withOverdue determines if overdue tasks should be included
-     * @return dashboard page with model data
+     * @param authToken           {@link OAuth2AuthenticationToken}
+     * @param withOverdue         determines if overdue tasks should be included
+     * @param timerSettingsCookie cookie that contains timer settings
+     * @param session             HTTP session
+     * @param model               view model
+     * @return dashboard page
      */
     @GetMapping("/")
-    public ModelAndView getDashboard(@Nullable OAuth2AuthenticationToken authToken,
-                                     @Nullable HttpSession session,
-                                     @Nullable @RequestParam("withOverdue") Boolean withOverdue) {
+    public String getDashboard(@Nullable OAuth2AuthenticationToken authToken,
+                               @Nullable @RequestParam("withOverdue") Boolean withOverdue,
+                               @CookieValue(value = "timerSettings", defaultValue = COOKIE_DEFAULT_VALUE) String timerSettingsCookie,
+                               @Nullable HttpSession session, Model model) throws IOException {
         List<Task> tasks = null;
+        String email = null;
         if (authToken != null) {
+            OAuth2User principal = authToken.getPrincipal();
             OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.loadAuthorizedClient(
-                    authToken.getAuthorizedClientRegistrationId(), authToken.getPrincipal().getName());
+                    authToken.getAuthorizedClientRegistrationId(), principal.getName());
             if (oAuth2AuthorizedClient != null) {
+                email = principal.getAttribute("email");
+
                 Todoist todoist = new Todoist(oAuth2AuthorizedClient.getAccessToken().getTokenValue());
                 try {
                     tasks = todoist.getActiveTasks().stream()
-                            .filter(task -> filterTaskByDueDate(task, withOverdue))
+                            .filter(task -> filterTodayTask(task, withOverdue))
                             .collect(Collectors.toList());
                 } catch (TodoistException e) {
                     throw new IllegalStateException("Error was occurred while trying to get Todoist active tasks", e);
@@ -71,10 +96,30 @@ public class DashboardController {
             }
         }
 
-        return new ModelAndView("dashboard", CollectionUtils.isEmpty(tasks) ? null : Map.of("tasks", tasks));
+        if (CollectionUtils.isNotEmpty(tasks)) {
+            model.addAttribute("tasks", tasks);
+        }
+
+        TimerSettingsDto timerSettingsDto;
+        if (StringUtils.isBlank(email) && !timerSettingsCookie.equals(COOKIE_DEFAULT_VALUE)) {
+            byte[] decodedTimerSettingsCookie = Base64Utils.decodeFromString(timerSettingsCookie);
+            timerSettingsDto = objectMapper.readValue(decodedTimerSettingsCookie, TimerSettingsDto.class);
+        } else {
+            timerSettingsDto = timerSettingsMapper.toTimerSettingsDto(timerSettingsService.getSettings(email));
+        }
+        model.addAttribute("timerSettings", timerSettingsDto);
+
+        return "dashboard";
     }
 
-    private boolean filterTaskByDueDate(Task task, @Nullable Boolean withOverdue) {
+    /**
+     * Filters task with today's due date.
+     *
+     * @param task        {@link Task}
+     * @param withOverdue decides if overdue tasks should be filtered
+     * @return {@code true} if task is with today's due date, {@code false} - otherwise
+     */
+    private boolean filterTodayTask(Task task, @Nullable Boolean withOverdue) {
         Assert.notNull(task, "task must not be null");
 
         Due due = task.due;
