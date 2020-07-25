@@ -20,3 +20,19 @@ spring:
             user-name-attribute: id
   thymeleaf:
     cache: false
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+pomodo:
+  timer-settings:
+    auto-start-next-round: true
+    work-period-time: 25
+    long-brake-time: 15
+    short-brake-time: 5
+    periods-before-long-break: 3

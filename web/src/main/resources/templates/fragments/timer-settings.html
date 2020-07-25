@@ -9,52 +9,54 @@
                 <h5 class="modal-title" id="gridModalLabel">Pomodoro timer settings</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <div class="modal-body">
-                <div class="container-fluid bd-example-row">
-                    <div class="row text-left">
-                        <div class="col">
-                            <input type="checkbox" class="align-middle" aria-label="Auto-start next round" checked>
-                            <span>Auto-start next round</span>
+            <form action="#" th:action="@{/timer-settings}" th:object="${timerSettings}" method="post">
+                <div class="modal-body">
+                    <div class="container-fluid bd-example-row">
+                        <div class="row text-left">
+                            <div class="col">
+                                <input type="checkbox" th:field="*{autoStartNextRound}" class="align-middle" aria-label="Auto-start next round" checked>
+                                <span>Auto-start next round</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row text-center mt-3">
-                        <div class="col"><h5>Time (in minutes)</h5></div>
-                    </div>
-                    <div class="row text-center">
-                        <div class="col">Work period</div>
-                        <div class="col">Short brake</div>
-                        <div class="col">Long brake</div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4 def-number-input number-input safari_only">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="quantity" min="1" max="59" name="quantity" value="25" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        <div class="row text-center mt-3">
+                            <div class="col"><h5>Time (in minutes)</h5></div>
                         </div>
-                        <div class="col-4 def-number-input number-input safari_only">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="quantity" min="1" max="20" name="quantity" value="5" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        <div class="row text-center">
+                            <div class="col">Work period</div>
+                            <div class="col">Short brake</div>
+                            <div class="col">Long brake</div>
                         </div>
-                        <div class="col-4 def-number-input number-input safari_only">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="quantity" min="1" max="60" name="quantity" value="15" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        <div class="row mt-1">
+                            <div class="col-8">Work period</div>
+                            <div class="col-2 ml-auto">
+                                <input class="form-control" min="1" max="59" value="25" type="text" th:field="*{workPeriodTime}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row text-left mt-3">
-                        <div class="col-8"># of rounds before long break</div>
-                        <div class="col-4 ml-auto def-number-input number-input safari_only">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="quantity" min="2" max="5" name="quantity" value="3" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        <div class="row mt-1">
+                            <div class="col-8">Short brake</div>
+                            <div class="col-2 ml-auto">
+                                <input class="form-control" min="1" max="20" value="5" type="text" th:field="*{shortBrakeTime}">
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-8">Short brake</div>
+                            <div class="col-2 ml-auto">
+                                <input class="form-control" min="1" max="60" value="15" type="text" th:field="*{longBrakeTime}">
+                            </div>
+                        </div>
+                        <div class="row text-left mt-3">
+                            <div class="col-8"># of rounds before long break</div>
+                            <div class="col-2 ml-auto">
+                                <input class="form-control" min="2" max="5" value="3" type="text" th:field="*{periodsBeforeLongBreak}">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
+                <div class="modal-footer">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

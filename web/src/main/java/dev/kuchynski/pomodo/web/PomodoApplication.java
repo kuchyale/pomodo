@@ -1,7 +1,11 @@
 package dev.kuchynski.pomodo.web;
 
+import dev.kuchynski.pomodo.core.configuration.TimerSettingsProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Spring Boot application starter.
@@ -10,6 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0
  */
 @SpringBootApplication
+@ComponentScan(basePackages = {"dev.kuchynski.pomodo"})
+@ConfigurationPropertiesScan("dev.kuchynski.pomodo")
+@EnableConfigurationProperties(TimerSettingsProperties.class)
 public class PomodoApplication {
 
 	/**

@@ -16,20 +16,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/", "/login", "/webjars/**", "/css/**", "/js/**", "/img/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                    .oauth2Login()
-                    .loginPage("/oauth2/authorization/todoist")
-                    .defaultSuccessUrl("/")
-                    .failureUrl("/loginFailure")
-                .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .deleteCookies()
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .logoutSuccessUrl("/");
+            .authorizeRequests()
+            .antMatchers("/", "/login", "/timer-settings", "/webjars/**", "/css/**", "/js/**", "/img/**").permitAll()
+            .anyRequest().authenticated()
+            .and()
+                .oauth2Login()
+                .loginPage("/oauth2/authorization/todoist")
+                .defaultSuccessUrl("/")
+                .failureUrl("/loginFailure")
+            .and()
+                .logout()
+                .logoutUrl("/logout")
+                .deleteCookies()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/");
     }
 }
