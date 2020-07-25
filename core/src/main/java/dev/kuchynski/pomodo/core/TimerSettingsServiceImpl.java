@@ -2,11 +2,9 @@ package dev.kuchynski.pomodo.core;
 
 import dev.kuchynski.pomodo.core.api.TimerSettingsService;
 import dev.kuchynski.pomodo.core.api.model.UserTimerSettings;
-import dev.kuchynski.pomodo.core.configuration.TimerSettingsProperties;
 import dev.kuchynski.pomodo.core.repository.UserTimerSettingsRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -21,18 +19,17 @@ import javax.annotation.Nullable;
  */
 @Service
 @AllArgsConstructor
-@EnableConfigurationProperties(TimerSettingsProperties.class)
 public class TimerSettingsServiceImpl implements TimerSettingsService {
 
     @NonNull
     private final UserTimerSettingsRepository timerSettingsRepository;
 
     @NonNull
-    private final TimerSettingsProperties timerSettingsProperties;
+    private final UserTimerSettings defaultUserTimerSettings;
 
     @Override
     public UserTimerSettings getSettings(@Nullable String email) {
-        return timerSettingsRepository.findByEmail(email).orElse(getDefaultTimerSettings());
+        return timerSettingsRepository.findByEmail(email).orElse(defaultUserTimerSettings);
     }
 
     @Override
@@ -48,16 +45,5 @@ public class TimerSettingsServiceImpl implements TimerSettingsService {
         dbTimerSettings.setPeriodsBeforeLongBreak(userTimerSettings.getPeriodsBeforeLongBreak());
 
         timerSettingsRepository.save(userTimerSettings);
-    }
-
-    private UserTimerSettings getDefaultTimerSettings() {
-        UserTimerSettings timerSettingsDto = new UserTimerSettings();
-        timerSettingsDto.setAutoStartNextRound(timerSettingsProperties.isAutoStartNextRound());
-        timerSettingsDto.setWorkPeriodTime(timerSettingsProperties.getWorkPeriodTime());
-        timerSettingsDto.setLongBrakeTime(timerSettingsProperties.getLongBrakeTime());
-        timerSettingsDto.setShortBrakeTime(timerSettingsProperties.getShortBrakeTime());
-        timerSettingsDto.setPeriodsBeforeLongBreak(timerSettingsProperties.getPeriodsBeforeLongBreak());
-
-        return timerSettingsDto;
     }
 }
