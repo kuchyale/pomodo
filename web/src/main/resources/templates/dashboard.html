@@ -9,13 +9,29 @@
 
     <div class="container mb-4 text-center">
         <div id="timer" class="container">
-            <h1 class="values display-1 font-weight-bold">25:00</h1>
+            <div class="justify-content-center">
+                <nav>
+                    <div class="nav nav-tabs justify-content-center border-0" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link border-0 active" id="nav-work-time-tab" data-toggle="tab" href="#nav-work-time" role="tab" aria-controls="nav-work-time" aria-selected="true">Work time</a>
+                        <a class="nav-item nav-link border-0" id="nav-sbrake-tab" data-toggle="tab" href="#nav-sbrake" role="tab" aria-controls="nav-sbrake" aria-selected="false">Short brake</a>
+                        <a class="nav-item nav-link border-0" id="nav-lbrake-tab" data-toggle="tab" href="#nav-lbrake" role="tab" aria-controls="nav-lbrake" aria-selected="false">Long brake</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent" th:with="workPeriodTime=${timerSettings.workPeriodTime}, shortBrakeTime=${timerSettings.shortBrakeTime}, longBrakeTime=${timerSettings.longBrakeTime}">
+                    <h1 class="values display-1 font-weight-bold tab-pane fade show active" id="nav-work-time" role="tabpanel" aria-labelledby="nav-work-time-tab"
+                        th:text="(${workPeriodTime} < 10 ? 'O' : '') + ${workPeriodTime} + ':00'">...</h1>
+                    <h1 class="values display-1 font-weight-bold tab-pane fade" id="nav-sbrake" role="tabpanel" aria-labelledby="nav-sbrake-tab"
+                        th:text="(${shortBrakeTime} < 10 ? 'O' : '') + ${workPeriodTime} + ':00'">...</h1>
+                    <h1 class="values display-1 font-weight-bold tab-pane fade" id="nav-lbrake" role="tabpanel" aria-labelledby="nav-lbrake-tab"
+                        th:text="(${longBrakeTime} < 10 ? 'O' : '') + ${workPeriodTime} + ':00'">...</h1>
+                </div>
+            </div>
             <div class="row justify-content-center">
                 <button type="button" id="timerStartBtn" class="btn btn-outline-success col-2">Start</button>
-                <button type="button" id="timerStopBtn" class="btn btn-outline-danger  col-2">Stop</button>
+                <button type="button" id="timerStopBtn" class="btn btn-outline-danger col-2">Stop</button>
             </div>
             <div class="row justify-content-center my-2">
-                <button type="button" class="btn btn-outline-danger timerSetupBtn col-2" data-toggle="modal" data-target="#timerSettingModal">
+                <button type="button" class="btn btn-outline-secondary timerSetupBtn col-2" data-toggle="modal" data-target="#timerSettingModal">
                     <i class="fa fa-cog mr-1"></i>Settings
                 </button>
             </div>
@@ -56,10 +72,17 @@
 
     <div th:replace="fragments/timer-settings.html :: timer-modal"></div>
 
+    <div th:replace="fragments/timer-tab-modal.html :: change-timer-tab-modal"></div>
+
     <div th:if="${#lists.isEmpty(tasks)}">
         <footer th:replace="fragments/common.html :: footer"></footer>
     </div>
 
+    <script>
+        const workPeriodTime = [[${timerSettings.workPeriodTime}]];
+        const shortBrakeTime = [[${timerSettings.shortBrakeTime}]];
+        const longBrakeTime = [[${timerSettings.longBrakeTime}]];
+    </script>
     <script th:src="@{/js/timer.js}"></script>
 </body>
 </html>
